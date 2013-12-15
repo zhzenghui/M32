@@ -1,0 +1,4 @@
+1.咨询的详细  http://115.29.37.109:8888Cookieinfo/getInfoDetail/1   不能访问
+2.咨询 需要一个标记已读的接口
+3.获取日志详情 http://115.29.37.109:8888Cookiejournal/getJournalDetail/1 不能访问
+3 获取法规 ：http://115.29.37.109:8888Cookieregulation/getRegualtionList/-1/-1/-1/5/1

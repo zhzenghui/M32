@@ -1,0 +1,83 @@
+API接口文档
+tips:以下的跟路径是http://localhost:8888Cookie
+
+
+资讯相关
+1.获取指定分类下的资讯列表
+/info/getInfoList/{cateId}/{numPerPage}/{curPage}      只能使用get请求
+参数说明:
+cateId：分类ID,-1的时候为全部分类
+numPerPage:每页多少条
+curPage:当前页
+2.获取指定资讯的详情
+/info/getInfoDetail/{id}    只能使用get请求
+id：资讯ID
+3.添加评论
+/info/addComment			只能使用post请求
+参数说明:
+infoId:资讯ID
+content:评论内容
+userId:用户ID
+4.对指定评论+顶或支持+1
+/info/zanComment  		只能使用put请求
+参数说明:
+id:评论Id
+
+
+===========================
+日历相关
+1.获取日历列表
+/journal/getJournalList/{numPerPage}/{curPage}    只能使用get请求
+参数同上
+2.获取日历详情
+/journal/getJournalDetail/{id}  只能使用get请求
+参数说明:
+id：日历ID
+
+===================================
+法规相关
+1.查询法规列表
+/regulation/getRegualtionList                     
+由于这个接口参数较多，必须指定key=value方式请求
+参数说明:
+level:法规等级 全部为-1 或者不传
+step:生命周期  全部为-1 或者不传
+key:查询关键字 为空全部
+numPerPage:每页多少条
+curPage:当前页
+
+======================================
+用户相关
+1.发送手机验证码
+/user/sendMobileCode/{mobile}   只能使用get请求
+参数说明:
+mobile 手机号
+返回 
+	result
+	message
+2.验证用户登录
+/user/login   只能使用post请求
+参数说明
+username 用户名
+password 密码
+返回
+	result
+	message
+	userId
+3.用户注册
+/user/register    只能使用post请求
+参数说明
+username  用户名
+password 密码
+mobile 手机号
+code  验证码
+返回
+	result
+	message
+4.获取指定用户的信息
+/user/getUser/{id}  只能使用get请求
+参数说明
+id:用户Id
+
+
+
