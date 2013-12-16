@@ -57,7 +57,8 @@
         
         
         if ( isInsert ) {
-            [array addObject:value];
+            
+            [array insertObject:value atIndex:0];
             [Cookie setCookie:keyName value:array];
             
         }

@@ -199,7 +199,7 @@
 
         }
         else {
-            [[Message share] messageAlert:@"注册失败"];
+            [[Message share] messageAlert:[dict objectForKey:@"message"]];
         }
         
         
@@ -456,12 +456,15 @@
     
     if (_isRegistion) {
         [submitUserButton addTarget:self action:@selector(submintUser) forControlEvents:UIControlEventTouchUpInside];
+        [submitUserButton setImage:[UIImage imageNamed:@"user_singup_button_0"] forState:UIControlStateNormal];
+
     }
     else {
         [submitUserButton addTarget:self action:@selector(retUserPassword) forControlEvents:UIControlEventTouchUpInside];
+        [submitUserButton setImage:[UIImage imageNamed:@"news_comment_unpraise"] forState:UIControlStateNormal];
+        
     }
     
-    [submitUserButton setImage:[UIImage imageNamed:@"user_singup_button_0"] forState:UIControlStateNormal];
     submitUserButton.frame = RectMake2x(67, 514, 508, 98);
     
     [registView  addSubview:submitUserButton];

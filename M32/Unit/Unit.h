@@ -210,7 +210,7 @@ RectMake_20_2x(CGFloat x, CGFloat y, CGFloat width, CGFloat height)
 
 
 
-#define KPageSize 4
+#define KPageSize 10
 #define KDuration .3
 #define KLongDuration .8
 

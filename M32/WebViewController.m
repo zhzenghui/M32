@@ -61,7 +61,7 @@
     
     [leftBarButton addTarget:self action:@selector(popViewController) forControlEvents:UIControlEventTouchUpInside];
     [leftBarButton setImage:[UIImage imageNamed:@"news_share_close"] forState:UIControlStateNormal];
-    leftBarButton.frame = NavitionRectMake(14, 30, 27, 25);
+    leftBarButton.frame = NavitionRectMake(5, 0, 44, 88);
     
     
     UIButton *rightBarButton = [UIButton buttonWithType:UIButtonTypeCustom];

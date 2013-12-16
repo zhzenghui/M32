@@ -6,7 +6,7 @@
 #import <UIKit/UIKit.h>
 #import "BaseViewController.h"
 
-@interface LawViewController : BaseViewController<UITableViewDataSource, UITableViewDelegate>
+@interface LawViewController : BaseViewController<UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate>
 {
     int currentSetp;
     
@@ -14,6 +14,8 @@
     UILabel *type_lable;
     UILabel *date_lable;
     
+    
+    bool noResults;
 }
 
 

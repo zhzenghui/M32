@@ -67,11 +67,6 @@
     
 }
 
-- (void)reloadTable
-{
-    [self.tableView reloadData];
-}
-
 - (void)addBottom
 {
     
@@ -106,13 +101,15 @@
     }
     
     NSString *keyWord = [NSString string];
-    if (keyWordTextField.text.length != 0 && currentSetp == 100) {
+    if (keyWordTextField.text.length != 0 ) {
         keyWord = [NSString stringWithFormat:@"&key=%@", keyWordTextField.text];
+        
         keyWord = [keyWord stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
         [mString appendString:keyWord];
 
     }
     
+
     NSString *url = [NSString stringWithFormat:@"%@regulation/getRegualtionList?%@&numPerPage=%d&curPage=%d", KHomeUrl, mString, KPageSize, curPage];
     
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
@@ -123,15 +120,28 @@
         __weak LawViewController *weakSelf = self;
         
         
+        if (array.count == 0 && keyWordTextField.text.length != 0) {
+            
+            noResults = YES;
+            [self.tableView reloadData];
+
+        }
+        else {
+            noResults = NO;
+        }
+        keyWordTextField.text = @"";
+
+        
+        
         
         if (array .count != 0) {
             if (_dataArray.count == 0) {
                 
                 _dataArray = [NSMutableArray arrayWithArray:array];
-                [self reloadTable];
+                [self.tableView reloadData];
                 
                 
-//                
+
                 date_lable.text = [NSString stringWithFormat: @"共%d条", [[responseObject objectForKey:@"num"] intValue]];
 
                 
@@ -162,11 +172,14 @@
         }
         else {
             
-            
+
             curPage --;
             [weakSelf.tableView.pullToRefreshView stopAnimating];
             [weakSelf.tableView.infiniteScrollingView stopAnimating];
             
+            date_lable.text = [NSString stringWithFormat: @"共0条"];
+
+            [self.tableView reloadData];
         }
         
         
@@ -196,27 +209,43 @@
 - (void)openTypeLaw:(UIButton *)button
 {
 
+    [self.tableView reloadData];
+
     currentSetp = -1;
+    
+    [keyWordTextField resignFirstResponder];
+
+    
+    
+
     
     
     __weak LawViewController *weakSelf = self;
 
     
     if (lawTypeView.alpha == 1) {
-        lawTypeView.alpha = 0;
 
         if (button.tag == 100) {
             
             [keyWordTextField resignFirstResponder];
             
+            if ( keyWordTextField.text.length == 0) {
+                
+                [[Message share] messageAlert:@"请填写搜索关键词"];
+                
+                return;
+            }
+            lawTypeView.alpha = 0;
 
-            
-            type_lable .text = [NSString stringWithFormat: @"搜索：%@", keyWordTextField.text];
+            type_lable.text = [NSString stringWithFormat: @"搜索：%@", keyWordTextField.text];
             [weakSelf.tableView triggerPullToRefresh];
 
             return;
         }
         
+        
+        lawTypeView.alpha = 0;
+
         currentSetp = button.tag;
 
         NSString *s = [NSString string];
@@ -313,6 +342,7 @@
 //    搜索
     keyWordTextField = [[UITextField alloc] init];
     keyWordTextField.frame = RectMake2x(66, 25+88, 320, 33);
+    keyWordTextField.delegate = self;
     keyWordTextField.placeholder = @"填写关键词";
     
     [lawTypeView addSubview:keyWordTextField];
@@ -534,7 +564,7 @@
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     _tableView.dataSource =  self;
     
-    _tableView.frame = NavitionRectMake(0, 79, 320, 471);;
+    _tableView.frame = NavitionRectMake(0, 79, 320,  screenHeight-64-44-15);;
     
     [self.baseView  addSubview:_tableView];
     
@@ -596,13 +626,18 @@
 {
     [super viewDidLoad];
     
+    noResults = NO;
+    
+    
+    currentSetp = -1;
+    
     __weak LawViewController *weakSelf = self;
     
     // setup pull-to-refresh
     [weakSelf.tableView addPullToRefreshWithActionHandler:^{
         [weakSelf insertRowAtTop];
     }];
-    [weakSelf.tableView triggerPullToRefresh];
+//    [weakSelf.tableView triggerPullToRefresh];
 
     
     _dataArray = [[NSMutableArray alloc]  init];
@@ -645,6 +680,9 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
+    if (noResults) {
+        return 1;
+    }
     return [_dataArray count];
 }
 
@@ -695,6 +733,12 @@
 
     }
     
+    if ( noResults ) {
+            cell.textLabel.text = @"没有搜索到任何结果";
+            
+            return cell;
+    }
+
     
     UILabel *nameLable = (UILabel *)[cell.contentView viewWithTag:100];
     UILabel *contentLable = (UILabel *)[cell.contentView viewWithTag:101];
@@ -770,6 +814,21 @@
 
 }
 
+#pragma mark - textField
+
+- (void)textFieldDidBeginEditing:(UITextField *)textField
+{
+    currentSetp = -1;
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    
+    [textField resignFirstResponder];
+    return YES;
+}
+
+#pragma mark - webView
 
 
 - (void)webViewDidStartLoad:(UIWebView *)webView

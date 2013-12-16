@@ -354,7 +354,43 @@
         NSString *s = [NSString stringWithFormat: @"%@  %@", formattedDateString, [dict objectForKey:@"address"]];
 
 
-        NSString *html = [NSString stringWithFormat:@"<html><body><div style='color:#999999'> </div><h1>%@</h1> <p> %@ </p>%@</body></html>", [dict objectForKey:@"title"], s ,[dict objectForKey:@"content"]];
+        NSString *html = [NSString stringWithFormat:@"<html><style type='text/css'>\
+                          body,html,div,h1{\
+                          margin:0;\
+                          padding:0;\
+                          }\
+                          \
+                          .newsTex {\
+                          margin: auto;\
+                          width: 100%%;\
+                              text-align:left;\
+                          }\
+                          \
+                          .newsTex h1 {\
+                          \
+                              font-family: '微软雅黑','黑体';\
+                              font-size: 22px;\
+                          }\
+                          .msgbar {\
+                          color: #999999;\
+                              font-size: 12px;\
+                          margin:10px auto;\
+                          }\
+                          .newsCon {\
+                              fonts-size:14px;\
+                          }\
+                          .main{\
+                          height:auto;\
+                          margin:20px 10px 10px 10px;\
+                          }\
+                          </style>\
+                          <body>\
+                          <div class='main'>\
+                            <div class='newsTex'><h1>%@</h1></div>\
+                          <div class='msgbar'>%@</div> \
+                            <div class='newsCon'> %@</div> \
+                          </div>\
+                          </body></html>", [dict objectForKey:@"title"], s ,[dict objectForKey:@"content"]];
 
         
         [contentWebView loadHTMLString:html baseURL:nil];
@@ -389,15 +425,12 @@
 {
     [super viewDidAppear:YES];
     
+    [self checkFav];
+    
     if (iOS7) {
         if (self.zhNavigationController) {
             content.frame = RectMake2x(0, 128+30, 640, (screenHeight*2)-206);
             type_bgImageView.frame = RectMake2x(0, 128, 640, 30);
-            
-            
-
-                
-            
             
         }
         else {
@@ -438,6 +471,35 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+
+
+
+- (void)checkFav
+{
+    
+    bool isFav = false;
+    
+    NSMutableArray *array =  [Cookie getCookie:@"fav"];
+    
+    for ( NSMutableDictionary *dict in array) {
+        
+        if ([[dict objectForKey:@"id"] intValue] == [[_dailyDict objectForKey:@"id"] intValue] &&
+            [[dict objectForKey:@"FavType"] intValue] == FavType_Daily ) {
+            
+            isFav = true;
+            
+        }
+    }
+    
+    if (isFav) {
+        
+        favButton.enabled = NO;
+        favButton.alpha = .2;
+    }
+    
+}
+
 
 
 #pragma mark -  webView

@@ -221,7 +221,8 @@
         return;
     }
 
-    
+    button.enabled = NO;
+    button.alpha = .2;
     
     NSMutableDictionary *dict = [NSMutableDictionary dictionary];
     [dict  setValue:[NSNumber numberWithInt:FavType_News] forKey:@"FavType"];
@@ -329,17 +330,32 @@
     
     
     
-    [content setContentSize:CGSizeMake(320, content.contentSize.height + contentWebView.frame.size.height+ hight)];
+    [content setContentSize:CGSizeMake(320, content.contentSize.height + contentWebView.frame.size.height+ hight -600)];
     
 
 }
 
 - (void) fasongComment
 {
-    [self closeCommentView];
+    
     
     NSString *text = textView.text;
     NSLog( @"po  %@", text);
+    
+    if (text.length == 0) {
+        [[Message share] messageAlert:@"请填写评论内容"];
+        
+        return;
+    }
+    
+    
+    
+    
+    [self closeCommentView];
+    
+
+
+    
 
     
     NSString *url = [NSString stringWithFormat:@"%@info/addComment", KHomeUrl];
@@ -575,16 +591,18 @@
     
     
     UIButton *closeButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    closeButton.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"news_share_close"]];
+//    closeButton.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"news_share_close"]];
+    [closeButton setImage:[UIImage imageNamed:@"news_share_close"] forState:UIControlStateNormal];
     [closeButton addTarget:self action:@selector(closeCommentView) forControlEvents:UIControlEventTouchUpInside];
-    closeButton.frame = RectMake2x(26, 18, 64, 59);
+    closeButton.frame = RectMake2x(20, 10, 88, 88);
     [commentView addSubview:closeButton];
     
     
     UIButton *fsButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    fsButton.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"news_share_save"]];
+//    fsButton.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"news_share_save"]];
+    [fsButton setImage:[UIImage imageNamed:@"news_share_save"] forState:UIControlStateNormal];
     [fsButton addTarget:self action:@selector(fasongComment) forControlEvents:UIControlEventTouchUpInside];
-    fsButton.frame = RectMake2x(550, 18, 65, 60);
+    fsButton.frame = RectMake2x(540, 10, 88, 88);
     [commentView addSubview:fsButton];
     
     
@@ -762,6 +780,30 @@
 
 }
 
+- (void)checkFav
+{
+    
+    bool isFav = false;
+    
+    NSMutableArray *array =  [Cookie getCookie:@"fav"];
+    
+    for ( NSMutableDictionary *dict in array) {
+        
+        if ([[dict objectForKey:@"id"] intValue] == [[_newsDict objectForKey:@"id"] intValue] &&
+            [[dict objectForKey:@"FavType"] intValue] == FavType_News ) {
+            
+            isFav = true;
+            
+        }
+    }
+    
+    if (isFav) {
+        
+        favButton.enabled = NO;
+        favButton.alpha = .2;
+    }
+    
+}
 
 
 - (void)viewDidAppear:(BOOL)animated
@@ -771,6 +813,8 @@
 
 
 
+    [self checkFav];
+    
     if ( ! self.zhNavigationController) {
         CGRect r = content.frame;
         r.origin = CGPointMake(r.origin.x, r.origin.y-20);

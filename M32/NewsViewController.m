@@ -60,10 +60,10 @@
 }
 
 
-- (void)addArray:(NSArray *)array
+- (void)addArray:(NSMutableArray *)array
 {
     
-    for (id dict in array) {
+    for (NSMutableDictionary *dict in array) {
         [_dataArray addObject:dict];
     }
 
@@ -85,54 +85,70 @@
         
         [self.tableView addInfiniteScrollingWithActionHandler:^{
             [weakSelf insertRowAtBottom];
-        
-        
-            [weakSelf.tableView.infiniteScrollingView stopAnimating];
-
         }];
     }
 }
 
-- (void)updateReaded:(NSArray *)array
+- (void)addRead:(NSMutableDictionary *)dict
+{
+    bool isInsert = true;
+    
+    for (int i =0; i <newsReadArray.count; i++) {
+        
+        int iid =  [[[newsReadArray objectAtIndex:i] objectForKey:@"id"] intValue];
+        
+        if ( [[dict objectForKey:@"id"] intValue]== iid ) {
+            
+            isInsert = false;
+        }
+    }
+    
+    if (  isInsert ) {
+        [newsReadArray addObject:dict];
+    }
+    
+    [Cookie setCookie:@"news" value:newsReadArray];
+
+}
+
+- (void)updateReaded:(NSMutableArray *)array
 {
 
     if (_dataArray == nil) {
         _dataArray = [[NSMutableArray alloc] init];
     }
 
-    bool isInsert = true;
     
-    for (NSDictionary *dict in array) {
-        isInsert = true;
-
-        NSMutableDictionary *d = [NSMutableDictionary dictionaryWithDictionary:dict];
+    for (NSMutableDictionary *dict in array) {
 
         for (int i =0; i <newsReadArray.count; i++) {
             
             int iid =  [[[newsReadArray objectAtIndex:i] objectForKey:@"id"] intValue];
             
             if ( [[dict objectForKey:@"id"] intValue]== iid ) {
-                
-                [d setValue:[NSNumber numberWithInt:1] forKey:@"readed"];
-                
-                [_dataArray addObject:d];
-                isInsert = false;
-                break;
-            }
-            
-        }
 
-        if (isInsert) {
-            [_dataArray addObject:dict];
+                
+                [dict setValue:[NSNumber numberWithInt:1] forKey:@"readed"];
+            }
         }
     }
     
 }
 
-- (void)insertReadArr
+
+- (NSMutableArray *)convertToNSMutableArray:(NSArray *)arr
 {
+    NSMutableArray *mArr = [NSMutableArray array];
     
+    for (NSDictionary *d in arr) {
+        NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithDictionary:d];
+        
+        [mArr addObject:dict];
+    }
+    
+    return mArr;
 }
+
 
 - (void)loadNetWorkData
 {
@@ -146,66 +162,58 @@
     
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager GET:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
-
         
-        NSArray *array = [responseObject objectForKey:@"list"];
+        
+        NSMutableArray *array = [self convertToNSMutableArray:[responseObject objectForKey:@"list"]];
         __weak NewsViewController *weakSelf = self;
-
+        
         
         
         if (array .count != 0) {
+            
+            
             if (_dataArray.count == 0) {
-
-
                 [self updateReaded:array];
-                
+
+                _dataArray = [NSMutableArray arrayWithArray:array];
                 [self reloadTable];
                 [weakSelf.tableView.pullToRefreshView stopAnimating];
-                [weakSelf.tableView.infiniteScrollingView stopAnimating];
-
-
-
+                
             }
             else {
-
+                
+                [self updateReaded:array];
 
                 NSMutableArray *indexPaths = [NSMutableArray array];
                 
                 for (int i = 0; i< array.count ; i++) {
-
+                    
                     [indexPaths addObject:[NSIndexPath indexPathForRow:weakSelf.dataArray.count+i inSection:0]];
-
+                    
                 }
-//                [self addArray:array];
-                [self updateReaded:array];
-
+                [self addArray:array];
+                
                 
                 [weakSelf.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationTop];
-//                [weakSelf.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:weakSelf.dataArray.count-2 inSection:0]
-//                                          atScrollPosition:UITableViewScrollPositionTop animated:YES];
+                //                [weakSelf.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:weakSelf.dataArray.count-2 inSection:0]
+                //                                          atScrollPosition:UITableViewScrollPositionTop animated:YES];
                 [weakSelf.tableView.infiniteScrollingView stopAnimating];
-
+                
             }
+            
             [self addBottom];
-
-
         }
         else {
             curPage --;
-            [weakSelf.tableView.pullToRefreshView stopAnimating];
             [weakSelf.tableView.infiniteScrollingView stopAnimating];
-
+            
         }
         
         
-
+        
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
-        __weak NewsViewController *weakSelf = self;
-
-        [weakSelf.tableView.pullToRefreshView stopAnimating];
-    
     }];
 }
 
@@ -597,7 +605,7 @@
     _tableView.showsPullToRefresh = NO;
     
     if (iOS7) {
-        _tableView.frame = NavitionRectMake(0, 105, 320, 471);;
+        _tableView.frame = NavitionRectMake(0, 105, 320, screenHeight-64-44-43);;
     }
     else {
         _tableView.frame = NavitionRectMake(0, 77, 320, 471);;
@@ -707,20 +715,16 @@
 
     
     
+    
     __weak NewsViewController *weakSelf = self;
     
-
+    // setup pull-to-refresh
     [self.tableView addPullToRefreshWithActionHandler:^{
         [weakSelf insertRowAtTop];
     }];
     
-    // setup infinite scrolling
-//    [self.tableView addInfiniteScrollingWithActionHandler:^{
-//        [weakSelf insertRowAtBottom];
-//    }];
-
     [weakSelf.tableView triggerPullToRefresh];
-
+    
     
     
 }
@@ -867,58 +871,7 @@
 
 #pragma mark - Table view delegate
 
-- (void)updateRead:(NSDictionary *)dict
-{
-    if ([dict  objectForKey:@"readed"] != nil) {
-        return;
-    }
-    
-    NSMutableDictionary *d = [NSMutableDictionary dictionaryWithDictionary:dict];
-    
-    
-    for (int i = 0; i< _dataArray.count; i++) {
-        NSDictionary *dataDict = [_dataArray objectAtIndex:i];
 
-        
-        if ( [[d objectForKey:@"id"] intValue] == [[dataDict objectForKey:@"id"] intValue]) {
-            [d setValue:@"1" forKey:@"readed"];
-            [_dataArray replaceObjectAtIndex:i withObject:d];
-        }
-        
-    }
-}
-
-- (void)addRead:(NSDictionary *)dict
-{
-    
-    [self updateRead:dict];
-
-    
-    bool isInsert = true;
-    
-    if ( dict ) {
-        NSMutableDictionary *dict1 = [NSMutableDictionary dictionary];
-        
-        for (NSDictionary *d in newsReadArray) {
-            
-            if ([[d objectForKey:@"id"] intValue] == [[dict objectForKey:@"id"] intValue]) {
-                isInsert = false;
-            }
-        }
-        
-        
-        if ( isInsert ) {
-            [dict1 setValue:[dict objectForKey:@"id"] forKey:@"id"];
-            [newsReadArray addObject:dict1];
-
-
-            [Cookie setCookie:@"news" value:newsReadArray];
-            
-        }
-    }
-    
-    
-}
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
 
@@ -934,8 +887,12 @@
 
     
     
-    [self addRead:[_dataArray objectAtIndex:indexPath.row]];
 
+    
+    NSMutableDictionary *dict = [_dataArray objectAtIndex:indexPath.row];
+    [dict setValue:@"1" forKey:@"readed"];
+    
+    [self addRead:dict];
     
     NewsCell *cell = (NewsCell *) [self.tableView cellForRowAtIndexPath:indexPath];
     [cell setReaded:YES];

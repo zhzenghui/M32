@@ -127,6 +127,7 @@
         }
         else {
             curPage --;
+            [weakSelf.tableView.pullToRefreshView stopAnimating];
             [weakSelf.tableView.infiniteScrollingView stopAnimating];
             
         }
@@ -136,6 +137,14 @@
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
+        
+        [[Message share] messageAlert:[NSString stringWithFormat:@"网络发生错误， 请刷新重试"]];
+        
+        __weak DailyViewController *weakSelf = self;
+
+        [weakSelf.tableView.pullToRefreshView stopAnimating];
+        [weakSelf.tableView.infiniteScrollingView stopAnimating];
+
     }];
     
     
@@ -227,7 +236,7 @@
     _tableView.delegate = self;
     _tableView.dataSource =  self;
     
-    _tableView.frame = NavitionRectMake(0, 64+(71/2), 320, screenHeight-64-(71/2));;
+    _tableView.frame = NavitionRectMake(0, 64+(71/2), 320,  screenHeight-64-44-36);;
     
     [self.baseView  addSubview:_tableView];
     
