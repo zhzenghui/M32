@@ -55,11 +55,6 @@
 
     self.user = [[Users alloc] init];
 
-    NSString *date = [KNSUserDefaults objectForKey:@"last_date"];
-    
-    if (date != nil) {
-        self.user.last_date = date;
-    }
     
 //    全局的数据
     

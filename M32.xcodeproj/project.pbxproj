@@ -74,6 +74,7 @@
 		C02D453B1840D5A4001E1CB5 /* news_share_wx@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C02D45331840D5A4001E1CB5 /* news_share_wx@2x.png */; };
 		C02D45461840E15C001E1CB5 /* FileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C02D45451840E15C001E1CB5 /* FileViewController.m */; };
 		C02D45491840E78A001E1CB5 /* DailyDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C02D45481840E78A001E1CB5 /* DailyDetailViewController.m */; };
+		C0339CB7185DD11E006AC2E8 /* bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C0339CB6185DD11E006AC2E8 /* bg@2x.png */; };
 		C03F51CB1840608B00689615 /* ZHNavigationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C03F51CA1840608B00689615 /* ZHNavigationViewController.m */; };
 		C03F51CE1840650B00689615 /* NavigationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C03F51CD1840650B00689615 /* NavigationViewController.m */; };
 		C074213E18486EF3002C5FE9 /* redme.txt in Resources */ = {isa = PBXBuildFile; fileRef = C074213D18486EF3002C5FE9 /* redme.txt */; };
@@ -338,6 +339,7 @@
 		C02D45451840E15C001E1CB5 /* FileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FileViewController.m; sourceTree = "<group>"; };
 		C02D45471840E78A001E1CB5 /* DailyDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DailyDetailViewController.h; sourceTree = "<group>"; };
 		C02D45481840E78A001E1CB5 /* DailyDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DailyDetailViewController.m; sourceTree = "<group>"; };
+		C0339CB6185DD11E006AC2E8 /* bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bg@2x.png"; sourceTree = "<group>"; };
 		C03F51C91840608B00689615 /* ZHNavigationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZHNavigationViewController.h; sourceTree = "<group>"; };
 		C03F51CA1840608B00689615 /* ZHNavigationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZHNavigationViewController.m; sourceTree = "<group>"; };
 		C03F51CC1840650B00689615 /* NavigationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NavigationViewController.h; sourceTree = "<group>"; };
@@ -685,6 +687,7 @@
 		C00C7E40183A1C6B00E203CA /* View */ = {
 			isa = PBXGroup;
 			children = (
+				C04A73D0185ECB01003926FE /* EGO */,
 				C083C232183B19A7005E6A46 /* ViewDeck */,
 				C08810C9183CA9F500FC7DA9 /* NewsCell.h */,
 				C08810CA183CA9F500FC7DA9 /* NewsCell.m */,
@@ -718,6 +721,21 @@
 				C0141FE918547D4E008CCC0D /* WebViewController.m */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		C04A73D0185ECB01003926FE /* EGO */ = {
+			isa = PBXGroup;
+			children = (
+				C04A73D6185ECB01003926FE /* LoadMoreDataView */,
+			);
+			path = EGO;
+			sourceTree = "<group>";
+		};
+		C04A73D6185ECB01003926FE /* LoadMoreDataView */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = LoadMoreDataView;
 			sourceTree = "<group>";
 		};
 		C074214D18489F77002C5FE9 /* regisition */ = {
@@ -768,6 +786,7 @@
 				C074214D18489F77002C5FE9 /* regisition */,
 				C0B1C35B18422328006968AF /* fav_title@2x.png */,
 				C0141FE618546163008CCC0D /* logout@2x.png */,
+				C0339CB6185DD11E006AC2E8 /* bg@2x.png */,
 				C09A4CFB1849D16C00C12117 /* daliy_cell_bg@2x.png */,
 				C09A4CF71849C88D00C12117 /* law_seachbar_bg@2x.png */,
 				C09A4CF81849C88D00C12117 /* law_seachbar_seach@2x.png */,
@@ -1178,6 +1197,7 @@
 				C07421551848AFDF002C5FE9 /* user_singup_button_0@2x.png in Resources */,
 				C08D5B84183DEF9B0080CBA7 /* 广告条@2x.png in Resources */,
 				C0EF975A1851B027001E356A /* news_cell_new_gray@2x.png in Resources */,
+				C0339CB7185DD11E006AC2E8 /* bg@2x.png in Resources */,
 				C0B1C35C18422328006968AF /* fav_title@2x.png in Resources */,
 				C0141FE1185321F7008CCC0D /* about@2x.png in Resources */,
 				C08810C1183C8B4A00FC7DA9 /* leftmenu-daliy-0@2x.png in Resources */,

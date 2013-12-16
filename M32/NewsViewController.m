@@ -85,6 +85,10 @@
         
         [self.tableView addInfiniteScrollingWithActionHandler:^{
             [weakSelf insertRowAtBottom];
+        
+        
+            [weakSelf.tableView.infiniteScrollingView stopAnimating];
+
         }];
     }
 }
@@ -157,6 +161,9 @@
                 
                 [self reloadTable];
                 [weakSelf.tableView.pullToRefreshView stopAnimating];
+                [weakSelf.tableView.infiniteScrollingView stopAnimating];
+
+
 
             }
             else {
@@ -179,13 +186,13 @@
                 [weakSelf.tableView.infiniteScrollingView stopAnimating];
 
             }
-            
             [self addBottom];
+
+
         }
         else {
             curPage --;
             [weakSelf.tableView.pullToRefreshView stopAnimating];
-
             [weakSelf.tableView.infiniteScrollingView stopAnimating];
 
         }
@@ -281,6 +288,7 @@
         
     }
     
+    typeView.alpha = 1;
     [UIView animateWithDuration:KDuration animations:^{
 
         if (iOS7) {
@@ -297,7 +305,6 @@
 {
     
     [UIView animateWithDuration:KDuration animations:^{
-        typeView.alpha = 1;
 
         if (iOS7) {
             typeView.frame = NavitionRectMake(0, -471, 320, 471);;
@@ -307,6 +314,10 @@
             
         }
 
+    }completion:^(BOOL finished) {
+        if (finished) {
+            typeView.alpha = 1;
+        }
     }];
 
 }
@@ -325,6 +336,9 @@
 - (void)todoSomething:(UIButton *)button
 {
     
+    
+//    NSLog(@"%d", button.tag);
+
     currentType =  button.tag;
     curPage = 1;
     
@@ -380,7 +394,7 @@
             
             [[self class] cancelPreviousPerformRequestsWithTarget:self selector:@selector(todoSomething:) object:button];
             
-            [self performSelector:@selector(todoSomething:) withObject:button afterDelay:0.5f];
+            [self performSelector:@selector(todoSomething:) withObject:button afterDelay:0.3f];
             
 
 
@@ -520,12 +534,18 @@
 
 - (void)loadCate
 {
-    NSString *dateString = [NSString stringWithFormat:@"1"];
-    if (SharedAppUser.last_date) {
-        dateString = SharedAppUser.last_date;
+    NSString *dateString = [NSDate stringFromDate:[NSDate date] withFormat:@"YYYYMMddHHmmss"];
+    if ( [KNSUserDefaults objectForKey:@"last_date"]) {
+        dateString =  [KNSUserDefaults objectForKey:@"last_date"] ;
     }
+
     
-    NSString *url = [NSString stringWithFormat:@"%@info/getFullCateList/%@/", KHomeUrl, SharedAppUser.last_date     ];
+ 
+    NSString *url = [NSString stringWithFormat:@"%@info/getFullCateList/%@/", KHomeUrl, dateString     ];
+    [KNSUserDefaults setObject: [NSDate stringFromDate:[NSDate date] withFormat:@"YYYYMMddHHmmss"] forKey:@"last_date"];
+
+    
+    
     
     
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
@@ -554,11 +574,6 @@
     currentType = -1;
     currentSuperType = -1;
     
-    
-
-    SharedAppUser.last_date = @"2013110209"; //[NSDate stringFromDate:[NSDate date] withFormat:@"YYYYMMddHHmmss"];
-    
-    [KNSUserDefaults setObject:SharedAppUser.last_date forKey:@"last_date"];
     
 
     
@@ -756,6 +771,7 @@
     NewsCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
         cell = [[NewsCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
     
     cell.contentImageView.alpha = 0;
@@ -767,7 +783,9 @@
 
 
     
+    
     if (  currentType == CateType_New ) {
+        
         [cell setCellType:CellTypeNew];
     }
     else {
@@ -849,8 +867,32 @@
 
 #pragma mark - Table view delegate
 
+- (void)updateRead:(NSDictionary *)dict
+{
+    if ([dict  objectForKey:@"readed"] != nil) {
+        return;
+    }
+    
+    NSMutableDictionary *d = [NSMutableDictionary dictionaryWithDictionary:dict];
+    
+    
+    for (int i = 0; i< _dataArray.count; i++) {
+        NSDictionary *dataDict = [_dataArray objectAtIndex:i];
+
+        
+        if ( [[d objectForKey:@"id"] intValue] == [[dataDict objectForKey:@"id"] intValue]) {
+            [d setValue:@"1" forKey:@"readed"];
+            [_dataArray replaceObjectAtIndex:i withObject:d];
+        }
+        
+    }
+}
+
 - (void)addRead:(NSDictionary *)dict
 {
+    
+    [self updateRead:dict];
+
     
     bool isInsert = true;
     
@@ -868,7 +910,6 @@
         if ( isInsert ) {
             [dict1 setValue:[dict objectForKey:@"id"] forKey:@"id"];
             [newsReadArray addObject:dict1];
-            
 
 
             [Cookie setCookie:@"news" value:newsReadArray];
@@ -910,6 +951,8 @@
     for (int i = 0; i< cateArray.count; i++) {
 
         NSDictionary *dict =  [cateArray objectAtIndex:i];
+        
+        
         
         if ([[dict  objectForKey:@"id"] intValue] == [[cateDict objectForKey:@"id"] intValue]) {
 

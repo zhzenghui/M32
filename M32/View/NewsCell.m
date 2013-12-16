@@ -41,6 +41,7 @@
         case CellTypeText:
         {
             
+
             _contentLabel.frame = RectMake2x(39, 120, 548, 80);
 
             break;
@@ -214,7 +215,7 @@
     }
     else {
         if (!selected) {
-            
+        
             self.contentView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"news_cell_bg_green"]];
         }
         else {

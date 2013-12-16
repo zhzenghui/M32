@@ -27,7 +27,7 @@ typedef UInt32 CateType;
 #import "TableView.h"
 #import "TypeTableView.h"
 
-@interface NewsViewController : BaseViewController<UITableViewDataSource, UITableViewDelegate, TypeTableViewDelegate, UIScrollViewDelegate>
+@interface NewsViewController : BaseViewController<UITableViewDataSource, UITableViewDelegate, TypeTableViewDelegate>
 {
     TypeTableView *typeTableView;
     UIView *typeView;

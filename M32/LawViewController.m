@@ -661,7 +661,8 @@
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
         cell.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"law_cell_bg"]];
-        
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+
         UIImageView *zanImageView = [[UIImageView alloc] init];
         zanImageView.tag = 103;
         zanImageView.frame = RectMake2x(40, 38, 53, 49);
