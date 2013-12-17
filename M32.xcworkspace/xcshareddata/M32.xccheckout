@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>9BC4BC47-89BB-4301-BD57-639174C3F7EF</string>
+	<key>IDESourceControlProjectName</key>
+	<string>M32</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>481D6F74-D639-4289-8415-13B8C609CDAF</key>
+		<string>https://github.com/zhzenghui/M32.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>M32.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>481D6F74-D639-4289-8415-13B8C609CDAF</key>
+		<string>..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/zhzenghui/M32.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>481D6F74-D639-4289-8415-13B8C609CDAF</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>481D6F74-D639-4289-8415-13B8C609CDAF</string>
+			<key>IDESourceControlWCCName</key>
+			<string>M32</string>
+		</dict>
+	</array>
+</dict>
+</plist>
